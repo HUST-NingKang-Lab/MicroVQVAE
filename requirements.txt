@@ -1,6 +1,7 @@
 torch>=2.1
 pytorch-lightning>=2.1
 transformers>=4.39
+huggingface-hub>=0.34,<1.0
 biopython>=1.83
 numpy>=1.24
 tqdm>=4.66

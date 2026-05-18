@@ -699,6 +699,18 @@ class DVAEMaskedTransformer(pl.LightningModule):
         x_hat = base + self.hparams.proto_bypass_weight * proto
         return x_hat
 
+    @torch.no_grad()
+    def lookup_codebook(self, indices: torch.Tensor) -> torch.Tensor:
+        """
+        Look up codebook embeddings for discrete token indices.
+        Args:
+          indices: arbitrary-shaped integer tensor of token IDs
+        Returns:
+          codebook embeddings with an added trailing code_dim axis
+        """
+        self.eval()
+        return F.embedding(indices, self.vq.codebook.weight)
+
     def codebook_diversity_loss(self, used_only: bool = True, min_used: int = 2) -> torch.Tensor:
         # Normalize codebook vectors with eps and optionally restrict to used codes.
         W = self.vq.codebook.weight              # [K,C]

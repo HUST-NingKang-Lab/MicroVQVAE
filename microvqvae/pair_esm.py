@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import Iterable, List
 
 import torch
-from transformers import AutoModel, AutoTokenizer
 
 from .fasta import ProteinRecord
 
@@ -43,6 +42,8 @@ class PairESMEmbedder:
 
     @classmethod
     def from_pretrained(cls, model_name_or_path: str, device: str = 'auto', dtype: str = 'auto') -> 'PairESMEmbedder':
+        from transformers import AutoModel, AutoTokenizer
+
         resolved_device = _resolve_device(device)
         resolved_dtype = _resolve_dtype(dtype, resolved_device)
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)

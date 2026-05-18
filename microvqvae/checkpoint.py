@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, TYPE_CHECKING
 
 import torch
 
-from .model import MicroVQVAEModel
+if TYPE_CHECKING:
+    from .model import MicroVQVAEModel
 
 
 def load_microvqvae_checkpoint(checkpoint_path: str | Path, device: str = 'auto') -> Tuple[MicroVQVAEModel, Dict[str, object]]:
+    from .model import MicroVQVAEModel
+
     checkpoint_path = Path(checkpoint_path)
     if not checkpoint_path.exists():
         raise FileNotFoundError(f'Checkpoint not found: {checkpoint_path}')

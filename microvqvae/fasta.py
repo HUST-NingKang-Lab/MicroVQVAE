@@ -21,18 +21,19 @@ def read_protein_fasta(path: str | Path) -> List[ProteinRecord]:
         raise FileNotFoundError(f'Input FASTA not found: {fasta_path}')
 
     records: List[ProteinRecord] = []
-    for idx, record in enumerate(SeqIO.parse(str(fasta_path), 'fasta')):
-        sequence = str(record.seq).strip()
-        if not sequence:
-            continue
-        records.append(
-            ProteinRecord(
-                index=idx,
-                sequence_id=record.id,
-                description=record.description,
-                sequence=sequence,
+    with fasta_path.open('r', encoding='utf-8') as handle:
+        for idx, record in enumerate(SeqIO.parse(handle, 'fasta')):
+            sequence = str(record.seq).strip()
+            if not sequence:
+                continue
+            records.append(
+                ProteinRecord(
+                    index=idx,
+                    sequence_id=record.id,
+                    description=record.description,
+                    sequence=sequence,
+                )
             )
-        )
 
     if not records:
         raise ValueError(f'No non-empty protein sequences were found in {fasta_path}')
